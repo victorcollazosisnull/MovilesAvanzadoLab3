@@ -56,12 +56,11 @@ public class GameManager : NetworkBehaviour
         enemySpawnTimer += Time.deltaTime;
         if (enemySpawnTimer > enemySpawnInterval)
         {
-            Vector3 enemyPos = new Vector3(Random.Range(-10, 10), 0.5f, Random.Range(-10, 10));
-            GameObject enemy = Instantiate(enemyPrefab, enemyPos, Quaternion.identity);
+            Vector3 spawnPos = new Vector3(Random.Range(-10, 10), 0.5f, Random.Range(-10, 10));
+            GameObject enemy = Instantiate(enemyPrefab, spawnPos, Quaternion.identity);
             enemy.GetComponent<NetworkObject>().Spawn(true);
             enemySpawnTimer = 0;
         }
-
     }
 }
 
