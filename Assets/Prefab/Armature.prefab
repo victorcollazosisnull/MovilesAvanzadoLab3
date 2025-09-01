@@ -199,7 +199,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 112
   m_CollisionDetection: 0
 --- !u!114 &6117059330752807605
 MonoBehaviour:
@@ -259,10 +259,10 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.5
-  m_Height: 1.8795898
+  m_Radius: 0.2
+  m_Height: 1.8
   m_Direction: 1
-  m_Center: {x: 0, y: 0.93292344, z: 0}
+  m_Center: {x: 0, y: 0.88, z: 0}
 --- !u!114 &-4892150909790337283
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -276,11 +276,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
+  PlayerID:
+    m_InternalValue: 0
+  Life:
+    m_InternalValue: 5
+  JumpForce: 5
   Speed: 4
-  LayerMask:
+  groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  jumpForce: 5
 --- !u!95 &8765153183033614333 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: 5866666021909216657, guid: 36078ab0369161e49a29d349ae3e0739, type: 3}
