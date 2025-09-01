@@ -154,6 +154,8 @@ MonoBehaviour:
   buffPrefab: {fileID: 3198454963442917693, guid: d9e36daf3b6f90e4598237db04edeaf0, type: 3}
   BuffSpawnCount: 4
   currentBuffCount: 0
+  enemyPrefab: {fileID: 2350228648102497598, guid: 0269c3bfc6b98c64db5756378ff49ea3, type: 3}
+  enemySpawnInterval: 5
 --- !u!4 &55199619
 Transform:
   m_ObjectHideFlags: 0

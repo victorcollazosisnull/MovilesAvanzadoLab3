@@ -5,39 +5,52 @@ using UnityEngine;
 public class EnemyMovement : NetworkBehaviour
 {
     public float followDistance = 10f;
-    public float moveSpeed = 3f;
-
+    public float speed = 3f;
     private Transform targetPlayer;
 
     void Update()
     {
-        if (!IsServer) return; 
+        if (!IsServer) return;
 
         if (targetPlayer == null)
         {
-            FindPlayer();
+            FindClosestPlayer();
             return;
         }
 
         float distance = Vector3.Distance(transform.position, targetPlayer.position);
-
         if (distance <= followDistance)
         {
             Vector3 direction = (targetPlayer.position - transform.position).normalized;
-            transform.position += direction * moveSpeed * Time.deltaTime;
+            transform.position += direction * speed * Time.deltaTime;
         }
     }
 
-    void FindPlayer()
+    void FindClosestPlayer()
     {
+        float minDistance = float.MaxValue;
         foreach (var client in NetworkManager.Singleton.ConnectedClientsList)
         {
-            var playerObject = client.PlayerObject;
-            if (playerObject != null)
+            var playerObj = client.PlayerObject;
+            if (playerObj != null)
             {
-                targetPlayer = playerObject.transform;
-                break; 
+                float dist = Vector3.Distance(transform.position, playerObj.transform.position);
+                if (dist < minDistance)
+                {
+                    minDistance = dist;
+                    targetPlayer = playerObj.transform;
+                }
             }
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (!IsServer) return;
+
+        if (other.CompareTag("Player"))
+        {
+            GetComponent<NetworkObject>().Despawn(true);
         }
     }
 }
