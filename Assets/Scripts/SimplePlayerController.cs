@@ -1,25 +1,24 @@
 using Unity.Netcode;
 using UnityEngine;
+[RequireComponent(typeof(Rigidbody))]
+[RequireComponent(typeof(Animator))]
 public class SimplePlayerController : NetworkBehaviour
 {
-
+    [Header("Network Values")]
     public NetworkVariable<ulong> PlayerID;
-
     public NetworkVariable<int> Life;
-
+    [Header("Settings")]
     public float JumpForce = 5;
     public float Speed = 10;
-
+    public LayerMask groundLayer;
+    [Header("References")]
     private Animator animator;
     private Rigidbody rb;
-    public LayerMask groundLayer;
-
-    void Start()
+    private void Awake()
     {
         animator = GetComponent<Animator>();
         rb = GetComponent<Rigidbody>();
     }
-
     void Update()
     {
         if (!IsOwner) return;
@@ -36,13 +35,11 @@ public class SimplePlayerController : NetworkBehaviour
 
         CheckGroundRpc(); 
     }
-
     [Rpc(SendTo.Server)]
     public void JumpTriggerRpc(string animationName)
     {
         animator.SetTrigger(animationName);
     }
-
     [Rpc(SendTo.Server)]
     public void CheckGroundRpc()
     {
@@ -50,7 +47,6 @@ public class SimplePlayerController : NetworkBehaviour
         animator.SetBool("Grounded", grounded);
         animator.SetBool("FreeFall", !grounded);
     }
-
     private bool IsGrounded()
     {
         return Physics.Raycast(transform.position, Vector3.down, 1.1f, groundLayer);
