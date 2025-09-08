@@ -763,8 +763,8 @@ GameObject:
   - component: {fileID: 2071567896}
   - component: {fileID: 2071567900}
   m_Layer: 0
-  m_Name: Quad
-  m_TagString: Untagged
+  m_Name: PARED
+  m_TagString: Pared
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -853,24 +853,33 @@ Transform:
   m_GameObject: {fileID: 2071567895}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 0.010290494, z: -0, w: 0.99994713}
-  m_LocalPosition: {x: -7.63, y: 7.19, z: 21.19}
-  m_LocalScale: {x: 11.314308, y: 14.413154, z: 14.413154}
+  m_LocalPosition: {x: -1, y: 17.8, z: 29.31}
+  m_LocalScale: {x: 61.385216, y: 36.56892, z: 33.90406}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 1.179, z: 0}
---- !u!114 &2071567900
-MonoBehaviour:
+--- !u!65 &2071567900
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2071567895}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3431292ee010b0d4b9767f1b08dcb1ce, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1.0000001, z: 6.1232336e-17}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

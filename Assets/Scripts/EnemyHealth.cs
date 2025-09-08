@@ -1,4 +1,5 @@
 using Unity.Netcode;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -59,6 +60,12 @@ public class EnemyHealth : NetworkBehaviour
             TakeDamageServerRpc(1);
             NetworkObject bala = collision.gameObject.GetComponent<NetworkObject>();
             bala.Despawn();
+        }
+        else if (collision.gameObject.CompareTag("Pared"))
+        {
+            NetworkObject bala = collision.gameObject.GetComponent<NetworkObject>();
+            bala.Despawn();
+            Debug.Log("choco con pared");
         }
     }
 }
