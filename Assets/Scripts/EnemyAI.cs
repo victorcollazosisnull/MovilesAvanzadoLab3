@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.AI;
 public class EnemyAI : NetworkBehaviour
 {
+    private NetworkObject _enemyObject;
     private NavMeshAgent agent;
     private Transform target;
 
@@ -13,6 +14,7 @@ public class EnemyAI : NetworkBehaviour
     private void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
+        _enemyObject = GetComponent<NetworkObject>();
     }
 
     private void Update()
@@ -54,13 +56,9 @@ public class EnemyAI : NetworkBehaviour
         target = disMinPlayer;
     }
 
-    private void OnTriggerEnter(Collider other)
+    public void Dead()
     {
         if (!IsServer) return;
-
-        if (other.CompareTag("Player"))
-        {
-            GetComponent<NetworkObject>().Despawn(true);
-        }
+        _enemyObject.Despawn(true);     
     }
 }
