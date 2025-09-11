@@ -6,16 +6,15 @@ using UnityEngine.UI;
 public class EnemyHealth : NetworkBehaviour
 {
     private EnemyAI enemy;
+    [Header("Enemy Life Values")]
     public int maxLife = 5;
     public NetworkVariable<int> currentLife = new NetworkVariable<int>();
-
+    [Header("Bar Life")]
     public Image barLife;
-
     private void Awake()
     {
         enemy = GetComponent<EnemyAI>();
     }
-
     public override void OnNetworkSpawn()
     {
         if (IsServer)
@@ -25,7 +24,6 @@ public class EnemyHealth : NetworkBehaviour
         currentLife.OnValueChanged += LifeChange;
         UpdateBarLife();
     }
-
     private void LifeChange(int oldValue, int newValue)
     {
         UpdateBarLife();
@@ -38,7 +36,6 @@ public class EnemyHealth : NetworkBehaviour
             barLife.fillAmount = (float)currentLife.Value / maxLife;
         }
     }
-
     [Rpc(SendTo.Server)]
     public void TakeDamageServerRpc(int amount)
     {
@@ -50,7 +47,6 @@ public class EnemyHealth : NetworkBehaviour
             enemy.Dead();
         }
     }
-
     private void OnCollisionEnter(Collision collision)
     {
         if (!IsServer) return;
@@ -58,14 +54,7 @@ public class EnemyHealth : NetworkBehaviour
         if (collision.gameObject.CompareTag("Bala"))
         {
             TakeDamageServerRpc(1);
-            NetworkObject bala = collision.gameObject.GetComponent<NetworkObject>();
-            bala.Despawn();
-        }
-        else if (collision.gameObject.CompareTag("Pared"))
-        {
-            NetworkObject bala = collision.gameObject.GetComponent<NetworkObject>();
-            bala.Despawn();
-            Debug.Log("choco con pared");
+            collision.gameObject.GetComponent<NetworkObject>().Despawn();
         }
     }
 }

@@ -19,4 +19,13 @@ public class Projectile : NetworkBehaviour
             NetworkObject.Despawn(); 
         }
     }
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (!IsServer) return;
+        if (collision.gameObject.CompareTag("Pared"))
+        {
+            NetworkObject.Despawn();
+            Debug.Log("Bala destruida por pared");
+        }
+    }
 }

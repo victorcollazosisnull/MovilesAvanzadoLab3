@@ -59,6 +59,7 @@ public class EnemyAI : NetworkBehaviour
     public void Dead()
     {
         if (!IsServer) return;
-        _enemyObject.Despawn(true);     
+        _enemyObject.Despawn(true);
+        Debug.Log("Enemigo destruido por bala");
     }
 }
