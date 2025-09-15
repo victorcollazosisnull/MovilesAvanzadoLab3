@@ -7,6 +7,12 @@ public class Projectile : NetworkBehaviour
     public float lifetime = 5f;
 
     private float timer = 0f;
+
+    public Player player;
+    //private void Awake()
+    //{
+    //    player = GetComponent<Player>();
+    //}
     void Update()
     {
         if (!IsServer) return; 
@@ -26,6 +32,12 @@ public class Projectile : NetworkBehaviour
         {
             NetworkObject.Despawn();
             Debug.Log("Bala destruida por pared");
+        }
+        else if (collision.gameObject.CompareTag("Player2"))
+        {
+            Debug.Log("le di a mi player");
+            player.TakeDamagePlayerRpc(10);
+            NetworkObject.Despawn();
         }
     }
 }

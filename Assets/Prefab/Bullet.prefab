@@ -152,6 +152,7 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   speed: 10
   lifetime: 5
+  player: {fileID: 2607859474219323653, guid: 2b5f04ffadf4684418706a268c79c070, type: 3}
 --- !u!114 &3390749563960176526
 MonoBehaviour:
   m_ObjectHideFlags: 0

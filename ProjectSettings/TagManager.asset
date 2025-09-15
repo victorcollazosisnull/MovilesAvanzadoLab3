@@ -7,6 +7,7 @@ TagManager:
   - CinemachineTarget
   - Bala
   - Pared
+  - Player2
   layers:
   - Default
   - TransparentFX
