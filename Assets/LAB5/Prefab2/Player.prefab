@@ -156,7 +156,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
   Speed: 10
-  projectilePrefab: {fileID: 8852592678421472977, guid: ed7c8139fcf2878469012f13af404da0, type: 3}
+  projectilePrefab: {fileID: 2859595839592402741, guid: 655a28fe4551d484db7c5659f3d176b6, type: 3}
   firePoint: {fileID: 2103117928856128316}
   accoundID:
     m_InternalValue:
@@ -197,7 +197,7 @@ MonoBehaviour:
     m_InternalValue: 100
   attack:
     m_InternalValue: 5
-  maxLife: 5
+  maxLife: 100
   barLife: {fileID: 8754504458249060086}
 --- !u!114 &-5455201646447110019
 MonoBehaviour:
@@ -404,7 +404,7 @@ Transform:
   m_GameObject: {fileID: 2413592149601158362}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.424, y: 0.437, z: 0}
+  m_LocalPosition: {x: 0.094, y: 0.437, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -482,7 +482,7 @@ MonoBehaviour:
   m_FillMethod: 0
   m_FillAmount: 1
   m_FillClockwise: 1
-  m_FillOrigin: 1
+  m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
 --- !u!1 &4402159406946952594

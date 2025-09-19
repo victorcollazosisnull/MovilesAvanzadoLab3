@@ -1,6 +1,6 @@
-using UnityEngine;
-using Unity.Netcode;
 using Unity.Collections;
+using Unity.Netcode;
+using UnityEngine;
 using UnityEngine.UI;
 public class Player : NetworkBehaviour
 {
@@ -18,6 +18,9 @@ public class Player : NetworkBehaviour
     [Header("Player Life Values")]
     public int maxLife = 100;
     public Image barLife;
+    [Header("Respawn Area")]
+    public Vector3 respawnCenter = Vector3.zero;  
+    public Vector3 respawnSize = new Vector3(20, 0, 20); 
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
@@ -29,8 +32,9 @@ public class Player : NetworkBehaviour
         {
             currentLife.Value = maxLife;
         }
+
         currentLife.OnValueChanged += LifePlayerChange;
-        UpdateBarLifePlayer();
+        LifePlayerChange(0, currentLife.Value); 
     }
     private void Update()
     {
@@ -54,27 +58,35 @@ public class Player : NetworkBehaviour
 
         GameObject projectileInstance = Instantiate(projectilePrefab, firePoint.position, firePoint.rotation);
         projectileInstance.GetComponent<NetworkObject>().Spawn();
+
+        projectileInstance.GetComponent<Projectile2>().Initialize(this, attack.Value);
     }
     public void SetData(PlayerData playerData)
     {
         accoundID.Value = playerData.accoundID;
         currentLife.Value = playerData.health;
+        //currentLife.Value = maxLife;
         attack.Value = playerData.attack;
         transform.position = playerData.position;
     }
     public override void OnNetworkDespawn()
     {
-        GameManager2.Instance.playerStateByAccountID[accoundID.Value.ToString()] = new PlayerData(accoundID.Value.ToString(), 
-            transform.position, 
-            currentLife.Value, 
-            attack.Value);
-        print("Me e desconectado " + NetworkManager.Singleton.LocalClientId + " y se a guardado la data de" + accoundID.Value);
+        if (IsServer && GameManager2.Instance != null)
+        {
+            GameManager2.Instance.playerStateByAccountID[accoundID.Value.ToString()] =
+                new PlayerData(accoundID.Value.ToString(), transform.position, currentLife.Value, attack.Value);
+
+            Debug.Log($"Jugador {accoundID.Value} desconectado, datos guardados.");
+        }
     }
     public void AplyBuff(int amount)
     {
         if (!IsServer) return;
 
-    }    
+        attack.Value += amount;
+        Debug.Log($"{accoundID.Value} tiene un buff de +{amount}, ataque : {attack.Value}");
+    }
+
     [Rpc(SendTo.Server)]
     public void TakeDamagePlayerRpc(int amount)
     {
@@ -83,8 +95,23 @@ public class Player : NetworkBehaviour
         currentLife.Value -= amount;
         if (currentLife.Value <= 0)
         {
-            //DESTRUIR Y SPAWNEAR EN SITIO RANDOM
+            Vector3 pos = GetRandomRespawnPosition();
+            transform.position = pos;
+            currentLife.Value = maxLife;
+
+            RespawnClientRpc(pos);
         }
+    }
+    [Rpc(SendTo.ClientsAndHost)]
+    private void RespawnClientRpc(Vector3 newPosition)
+    {
+        transform.position = newPosition;
+    }
+    private Vector3 GetRandomRespawnPosition()
+    {
+        float x = Random.Range(-respawnSize.x / 2, respawnSize.x / 2);
+        float z = Random.Range(-respawnSize.z / 2, respawnSize.z / 2);
+        return respawnCenter + new Vector3(x, 0, z);
     }
     private void UpdateBarLifePlayer()
     {
@@ -120,14 +147,6 @@ public class Player : NetworkBehaviour
         else
         {
             lineRenderer.enabled = false;
-        }
-    }
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.CompareTag("Bala"))
-        {
-            TakeDamagePlayerRpc(1);
-            collision.gameObject.GetComponent<NetworkObject>().Despawn();
         }
     }
 }

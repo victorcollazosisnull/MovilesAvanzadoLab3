@@ -5,11 +5,19 @@ using UnityEngine;
 
 public class GameManager2 : NetworkBehaviour
 {
+    [Header("Player Settings")]
     public GameObject playerPrefab;
     public static GameManager2 Instance;
     public Dictionary<string, PlayerData> playerStateByAccountID = new();
 
     public Action OnConnection;
+
+    [Header("Buff Settings")]
+    public GameObject buffPrefab;              
+    public float buffSpawnInterval = 10f;      
+    public Vector3 buffSpawnArea = new Vector3(20, 0, 20); 
+    private float buffTimer;
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -38,18 +46,22 @@ public class GameManager2 : NetworkBehaviour
         print("El jugador" + clientID + "Se a desconectado");
     }
     [Rpc(SendTo.Server)]
-    public void RegisterPlayerServerRpc(string accountID, ulong ID)
+    public void RegisterPlayerServerRpc(string accountID, ulong clientID) 
     {
-        if (!playerStateByAccountID.TryGetValue(accountID, out PlayerData data))
+        PlayerData data;
+
+        if (!playerStateByAccountID.TryGetValue(accountID, out data))
         {
-            PlayerData newData = new PlayerData(accountID, Vector3.zero, 100, 5);
-            playerStateByAccountID[accountID] = newData;
-            SpawnPlayerServer(ID, newData);
+            data = new PlayerData(accountID, Vector3.zero, 100, 5);
+            playerStateByAccountID[accountID] = data;
+            Debug.Log($"Nuevo jugador registrado, Bienvenido al vicio: {accountID}");
         }
         else
         {
-            SpawnPlayerServer(ID, data);
+            Debug.Log($"Jugador {accountID} se reconecto, restaurando sus estadisticas.");
         }
+
+        SpawnPlayerServer(clientID, data);
     }
     public void SpawnPlayerServer(ulong ID, PlayerData data)
     {
@@ -57,5 +69,25 @@ public class GameManager2 : NetworkBehaviour
         GameObject player = Instantiate(playerPrefab);
         player.GetComponent<NetworkObject>().SpawnAsPlayerObject(ID, true);
         player.GetComponent<Player>().SetData(data);
+    }
+    private void Update()
+    {
+        if (!IsServer) return;
+
+        buffTimer += Time.deltaTime;
+        if (buffTimer >= buffSpawnInterval)
+        {
+            SpawnBuff();
+            buffTimer = 0f;
+        }
+    }
+
+    private void SpawnBuff()
+    {
+        Vector3 pos = new Vector3(UnityEngine.Random.Range(-buffSpawnArea.x / 2, buffSpawnArea.x / 2),0.5f,
+                                  UnityEngine.Random.Range(-buffSpawnArea.z / 2, buffSpawnArea.z / 2));
+
+        GameObject buff = Instantiate(buffPrefab, pos, Quaternion.identity);
+        buff.GetComponent<NetworkObject>().Spawn(true);
     }
 }
